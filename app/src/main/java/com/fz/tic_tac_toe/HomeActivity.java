@@ -6,15 +6,36 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class HomeActivity extends AppCompatActivity {
-
+    private long backPress;
+    private Toast backToast;
+    
     boolean active = true;                                  //var for checking game is active or not
     int playerActive = 0;                                   //0-X 1-X
     int count = 0;                                          //count variable for no of times screen is tapped
     int winOccur = 0;                                       //if anyone has won
     int[] gameArray = {9,9,9,9,9,9,9,9,9};                  //initial game state
     int[][] win = {{0,1,2},{3,4,5},{6,7,8},{0,3,6},{1,4,7},{0,4,8},{2,4,6},{2,5,8}};  //winning combination of same symbol
+    
+    @Override
+    public void onBackPressed() {
+        if (backPress + 2000 > System.currentTimeMillis())
+        {
+            backToast.cancel();
+            super.onBackPressed();
+            backPress = System.currentTimeMillis();
+            return;
+        }
+        else
+        {
+            backToast = Toast.makeText(getBaseContext(),"Press back again to exit",Toast.LENGTH_SHORT);
+            backToast.show();
+        }
+        backPress = System.currentTimeMillis();
+    }
+    
     public void playerTap(View view)
     {
         if(count==10)
